@@ -4,7 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Badge from "@mui/material/Badge";
 import Menu from "@mui/material/Menu";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Table } from "react-bootstrap";
 import { DELETE } from "../redux/actions/action";
@@ -14,6 +14,8 @@ const Header = () => {
   console.log(getData);
 
   const dispatch = useDispatch();
+
+  const history = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -25,6 +27,9 @@ const Header = () => {
   };
 
   const removeItem = (id) => {
+    if (getData.length == 1) {
+      history("/");
+    }
     dispatch(DELETE(id));
     total();
   };
@@ -32,7 +37,7 @@ const Header = () => {
   const total = () => {
     let total = 0;
     getData.map((item) => {
-      total += item.price;
+      total += item.price * item.qnty;
     });
     return total;
   };

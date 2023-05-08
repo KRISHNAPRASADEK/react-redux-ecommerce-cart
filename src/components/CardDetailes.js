@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { DELETE } from "../redux/actions/action";
+import { DELETE, ADD, DECREASE_QUANTITY } from "../redux/actions/action";
 
 const CardDetailes = () => {
   const [items, setItems] = useState([]);
@@ -23,7 +23,7 @@ const CardDetailes = () => {
 
   const total = () => {
     let total = getData.reduce((acc, item) => {
-      return acc + item.price;
+      return acc + item.price * item.qnty;
     }, 0);
     return total;
   };
@@ -37,6 +37,14 @@ const CardDetailes = () => {
     compare();
     total();
   }, [id]);
+
+  const send = (e) => {
+    dispatch(ADD(e));
+  };
+
+  const remove = (item) => {
+    dispatch(DECREASE_QUANTITY(item));
+  };
 
   return (
     <>
@@ -68,6 +76,33 @@ const CardDetailes = () => {
                           <p>
                             <strong>Total</strong> : ₹{total()}
                           </p>
+                          <div
+                            className="mt-5 d-flex justify-content-between align-items-center"
+                            style={{
+                              width: 100,
+                              cursor: "pointer",
+                              background: "#ddd",
+                              color: "#111",
+                            }}
+                          >
+                            <span
+                              style={{ fontSize: 24 }}
+                              onClick={
+                                item.qnty <= 1
+                                  ? () => removeItem(item.id)
+                                  : () => remove(item)
+                              }
+                            >
+                              -
+                            </span>
+                            <span style={{ fontSize: 22 }}>{item.qnty}</span>
+                            <span
+                              style={{ fontSize: 24 }}
+                              onClick={() => send(item)}
+                            >
+                              +
+                            </span>
+                          </div>
                         </td>
                         <td>
                           <p>

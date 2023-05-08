@@ -11,3 +11,10 @@ export const DELETE = (id) => {
     payload: id,
   };
 };
+
+export const DECREASE_QUANTITY = (item) => {
+  return {
+    type: "REMOVE_ONE_FROM_CART",
+    payload: item,
+  };
+};
